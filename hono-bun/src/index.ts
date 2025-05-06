@@ -1,8 +1,9 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
+import {logger} from 'hono/logger'
 
 const app = new Hono()
-
+app.use(logger())
 // Serve static files from /public folder
 app.use('*', serveStatic({ root: './public' }))
 

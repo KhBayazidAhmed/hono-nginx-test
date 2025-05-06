@@ -2,30 +2,9 @@ services:
   only-nginx:
     image: nginx:stable-alpine
     volumes:
-      - ./shared-html/index.html:/usr/share/nginx/html/index.html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./shared-html:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
     ports:
       - "8080:80"
-  bun1:
-    build: ./hono-bun
-    volumes:
-      - ./shared-html:/app/public
-    environment:
-      - PORT=3000
-    restart: always
-  bun2:
-    build: ./hono-bun
-    volumes:
-      - ./shared-html:/app/public
-    environment:
-      - PORT=3000
-    restart: always
-  hono-nginx:
-    image: nginx:stable-alpine
-    ports:
-      - "3000:80"
-    volumes:
-      - ./nginx/hono-nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - bun1
-      - bun2
+    restart: unless-stopped
